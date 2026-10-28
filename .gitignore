@@ -1,0 +1,18 @@
+# Python cache and local environments
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Generated input data (the generator remains tracked)
+data/
+*.csv
+
+docs/
+*.md
+
+# IDE and operating-system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

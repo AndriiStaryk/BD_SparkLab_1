@@ -1,0 +1,35 @@
+name: spark-lab
+
+x-spark-common: &spark-common
+  image: spark:4.2.0-python3
+  user: "0:0"
+  environment:
+    PYSPARK_PYTHON: python3
+    SPARK_CONF_DIR: /opt/spark/conf
+  volumes:
+    - ./conf/spark-defaults.conf:/opt/spark/conf/spark-defaults.conf:ro
+    - spark-events:/tmp/spark-events
+
+services:
+  spark:
+    <<: *spark-common
+    entrypoint: ["/usr/bin/env"]
+    command: ["/opt/spark/bin/spark-submit", "--version"]
+    volumes:
+      - ./conf/spark-defaults.conf:/opt/spark/conf/spark-defaults.conf:ro
+      - ./data:/lab/data:ro
+      - ./scripts:/lab/scripts:ro
+      - spark-events:/tmp/spark-events
+    ports:
+      - "4040:4040"
+
+  history:
+    <<: *spark-common
+    entrypoint: ["/opt/spark/bin/spark-class"]
+    command: ["org.apache.spark.deploy.history.HistoryServer"]
+    ports:
+      - "18080:18080"
+    restart: unless-stopped
+
+volumes:
+  spark-events:
